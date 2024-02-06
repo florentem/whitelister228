@@ -33,44 +33,55 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .done {
+            background-color: #f0f0f0;
+        }
+        .done p {
+            color: #4caf50;
+        }
     </style>
 </head>
 <body>
-    <input type="text" id="nickname" placeholder="Enter nickname">
+    <input type="text" id="nickname" placeholder="Enter nickname" oninput="updateCommands()">
     <br>
-    <div class="command-box">
+    <div class="command-box" id="command1box">
         <button onclick="copyCommand(1)">Copy Command 1</button>
         <p id="command1"></p>
     </div>
 
-    <div class="command-box">
+    <div class="command-box" id="command2box">
         <button onclick="copyCommand(2)">Copy Command 2</button>
         <p id="command2"></p>
     </div>
 
-    <div class="command-box">
+    <div class="command-box" id="command3box">
         <button onclick="copyCommand(3)">Copy Command 3</button>
         <p id="command3"></p>
     </div>
 
     <script>
-        function copyCommand(commandNumber) {
+        function updateCommands() {
             var nickname = document.getElementById('nickname').value;
+
+            document.getElementById('command1').innerText = "/whitelist add " + nickname;
+            document.getElementById('command2').innerText = "/op " + nickname;
+            document.getElementById('command3').innerText = "/team join balbes " + nickname;
+        }
+
+        function copyCommand(commandNumber) {
             var command;
 
             switch (commandNumber) {
                 case 1:
-                    command = "/whitelist add " + nickname;
+                    command = document.getElementById('command1').innerText;
                     break;
                 case 2:
-                    command = "/op " + nickname;
+                    command = document.getElementById('command2').innerText;
                     break;
                 case 3:
-                    command = "/team join balbes " + nickname;
+                    command = document.getElementById('command3').innerText;
                     break;
             }
-
-            document.getElementById('command' + commandNumber).innerText = command;
 
             // Copy to clipboard logic (for simplicity, you may want to enhance this)
             var textarea = document.createElement('textarea');
@@ -79,6 +90,11 @@
             textarea.select();
             document.execCommand('copy');
             document.body.removeChild(textarea);
+
+            // Highlight command box and add "Done" label
+            var commandBox = document.getElementById('command' + commandNumber + 'box');
+            commandBox.classList.add('done');
+            commandBox.insertAdjacentHTML('beforeend', '<p>Done</p>');
         }
     </script>
 </body>
